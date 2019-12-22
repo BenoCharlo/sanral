@@ -1,4 +1,4 @@
-def data_printing(data):
+def data_args(data):
     """This function prints the shape and the columns of a dataset
     
     Arguments:
@@ -7,5 +7,6 @@ def data_printing(data):
     print("The shape of the data is: ", data.shape)
     print()
     print("The columns of the dataset are:")
+    print()
     for col in data.columns:
         print(col)
