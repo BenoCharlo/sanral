@@ -10,3 +10,10 @@ def data_args(data):
     print()
     for col in data.columns:
         print(col)
+
+
+def daterange(start_date, end_date):
+    delta = datetime.timedelta(hours=1)
+    while start_date <= end_date:
+        yield start_date
+        start_date += delta
