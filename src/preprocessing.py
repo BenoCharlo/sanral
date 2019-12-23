@@ -41,3 +41,34 @@ def create_new_train(dates, roads_id):
     data_output = pd.DataFrame({"datetime": dates, "segment_id": roads_id})
 
     return data_output
+
+
+def create_target(data, new_data):
+
+    assert set(["Occurrence Local Date Time", "road_segment_id"]).issubset(data.columns)
+    assert set(["datetime", "segment_id"]).issubset(new_data.columns)
+
+    new_data["target"] = [0] * new_data.shape[0]
+    # new_data["target_label"] = ["No inicident"] * new_data.shape[0]
+
+    data["Occurrence Local Date Time"] = pd.to_datetime(
+        data["Occurrence Local Date Time"]
+    )
+
+    data_datetime = [
+        str(date - datetime.timedelta(minutes=date.minute))
+        for date in data["Occurrence Local Date Time"]
+    ]
+
+    new_data["datetime_segment"] = [
+        (x, y) for x, y in zip(new_data["datetime"], new_data["segment_id"])
+    ]
+    data_datetime_segment = [
+        (x, y) for x, y in zip(data_datetime, data["road_segment_id"])
+    ]
+
+    new_data["target"][new_data["datetime_segment"].isin(data_datetime_segment)] = 1
+
+    new_data.drop("datetime_segment", axis=1, inplace=True)
+
+    return new_data
