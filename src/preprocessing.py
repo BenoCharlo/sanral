@@ -51,13 +51,9 @@ def create_target(data, new_data):
     new_data["target"] = [0] * new_data.shape[0]
     # new_data["target_label"] = ["No inicident"] * new_data.shape[0]
 
-    data["Occurrence Local Date Time"] = pd.to_datetime(
-        data["Occurrence Local Date Time"]
-    )
-
     data_datetime = [
         str(date - datetime.timedelta(minutes=date.minute))
-        for date in data["Occurrence Local Date Time"]
+        for date in pd.to_datetime(data["Occurrence Local Date Time"])
     ]
 
     new_data["datetime_segment"] = [
