@@ -38,10 +38,10 @@ def simple_date_features(data, date_var):
 
     data[date_var] = pd.to_datetime(data[date_var])
 
-    data["year"] = data[date_var].year
-    data["month"] = data[date_var].month
-    data["day"] = data[date_var].day
-    data["hour"] = data[date_var].hour
+    data["year"] = [date.year for date in data[date_var]]
+    data["month"] = [date.month for date in data[date_var]]
+    data["day"] = [date.day for date in data[date_var]]
+    data["hour"] = [date.hour for date in data[date_var]]
 
     data["name_day"] = [date.strftime("%A") for date in data[date_var]]
 
