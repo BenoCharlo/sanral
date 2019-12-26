@@ -20,3 +20,26 @@ def daterange(start_date, end_date):
     while start_date <= end_date:
         yield start_date
         start_date += delta
+
+def simple_date_features(data, date_var):
+    """
+    This function creates date-related features
+    
+    Arguments:
+        data {dataframe} -- [should contain a date like varaible in str or datetime format]
+    
+    Returns:
+        [dataframe] -- [with newly created date-related features]
+    """
+    assert set([date_var]).issubset(data.columns)
+
+    data[date_var] = pd.todate_vardata[date_var])
+
+    data["year"] = data[date_var].year
+    data["month"] = data[date_var].month
+    data["day"] = data[date_var].day
+    data["hour"] = data[date_var].hour
+
+    data["name_day"] = [date.strftime("%A") for date in data[date_var]]
+
+    return data
