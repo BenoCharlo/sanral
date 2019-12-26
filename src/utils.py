@@ -1,4 +1,6 @@
 import datetime
+import pandas as pd
+import numpy as np
 
 
 def data_args(data):
@@ -21,6 +23,7 @@ def daterange(start_date, end_date):
         yield start_date
         start_date += delta
 
+
 def simple_date_features(data, date_var):
     """
     This function creates date-related features
@@ -33,7 +36,7 @@ def simple_date_features(data, date_var):
     """
     assert set([date_var]).issubset(data.columns)
 
-    data[date_var] = pd.todate_vardata[date_var])
+    data[date_var] = pd.to_datetime(data[date_var])
 
     data["year"] = data[date_var].year
     data["month"] = data[date_var].month
