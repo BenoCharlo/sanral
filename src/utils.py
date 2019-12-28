@@ -46,3 +46,13 @@ def simple_date_features(data, date_var):
     data["name_day"] = [date.strftime("%A") for date in data[date_var]]
 
     return data
+
+
+def separate_train_test(self, data):
+    assert "is_train" in list(data.columns)
+
+    train_data = data.loc[data["is_train"] == 1]
+    test_data = data.loc[data["is_train"] == 0]
+
+    return train_data.drop("is_train", axis=1), test_data.drop("is_train", axis=1)
+
