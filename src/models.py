@@ -70,6 +70,12 @@ class KNN_Model:
         return scores
 
 
+def f1_evalerror(preds, dtrain):
+    labels = dtrain.get_label()
+    error = f1_score(labels, preds)
+    return error
+
+
 class XGB_Model:
     def __init__(self):
         return None
@@ -95,7 +101,8 @@ class XGB_Model:
             nfold=nfold,
             stratified=False,
             folds=None,
-            metrics="error",
+            feval=f1_evalerror,
+            # metrics="error",
             seed=43,
         )
         return cv_classif_xgb
