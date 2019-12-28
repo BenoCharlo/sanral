@@ -89,3 +89,12 @@ def create_coord(data, new_data, coherent_id):
 
     return new_data
 
+
+def le_matrix(self, data):
+    data_categorical = data.drop(aliases.not_to_encoded, axis=1)
+    data_categorical = utils.MultiColumnLabelEncoder().fit_transform(data_categorical)
+    data = pd.concat(
+        [data_categorical, data.filter(aliases.not_to_encoded, axis=1)], axis=1
+    )
+    return data
+
