@@ -48,11 +48,20 @@ def simple_date_features(data, date_var):
     return data
 
 
-def separate_train_test(self, data):
-    assert "is_train" in list(data.columns)
+def separate_train_test(data):
+    """
+    This function separate a joint dataframe in train/test dataframe
+    
+    Arguments:
+        data {[dataframe]} -- [should contain a variable named is_train (train_test)]
+    
+    Returns:
+        [dataframes] -- [2 dataframes]
+    """
+    assert "train_test" in list(data.columns)
 
-    train_data = data.loc[data["is_train"] == 1]
-    test_data = data.loc[data["is_train"] == 0]
+    train_data = data.loc[data["train_test"] == 1]
+    test_data = data.loc[data["train_test"] == 0]
 
-    return train_data.drop("is_train", axis=1), test_data.drop("is_train", axis=1)
+    return train_data.drop("train_test", axis=1), test_data.drop("train_test", axis=1)
 
