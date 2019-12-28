@@ -6,13 +6,12 @@ import joblib
 
 from sklearn.model_selection import KFold
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import f1_score
 
 import xgboost as xgb
 import lightgbm as lgb
-from catboost import CatBoostRegressor, Pool, cv
 
-from src import aliases
+# from catboost import CatBoostRegressor, Pool, cv
 
 
 class KFold_Strategy:
@@ -30,9 +29,6 @@ class KNN_Model:
         return None
 
     def prepare_data(self, data):
-        if aliases.order_index[0] in list(data.columns):
-            data.drop(aliases.order_index, axis=1, inplace=True)
-
         return data.values
 
     def train_knn(self, data, target, n_neighbors):
@@ -79,8 +75,6 @@ class XGB_Model:
         return None
 
     def prepare_data(self, data, target=None):
-        if aliases.order_index[0] in list(data.columns):
-            data.drop(aliases.order_index, axis=1, inplace=True)
 
         if target is None:
             data = xgb.DMatrix(data, label=target)
@@ -94,17 +88,17 @@ class XGB_Model:
 
     def train_xgb_cv(self, data, params, nfold, num_boost_round):
 
-        cv_rmse_xgb = xgb.cv(
+        cv_classif_xgb = xgb.cv(
             params,
             data,
             num_boost_round=num_boost_round,
             nfold=nfold,
             stratified=False,
             folds=None,
-            metrics="rmse",
+            metrics="error",
             seed=43,
         )
-        return cv_rmse_xgb
+        return cv_classif_xgb
 
     def predict_xgb(bst, data):
         return bst.predict(data)
@@ -115,8 +109,6 @@ class LGB_Model:
         return None
 
     def prepare_data(self, data, target=None):
-        if aliases.order_index[0] in list(data.columns):
-            data.drop(aliases.order_index, axis=1, inplace=True)
 
         if target is None:
             data = lgb.Dataset(data, label=target)
@@ -130,17 +122,17 @@ class LGB_Model:
 
     def train_lgb_cv(self, data, params, nfold, num_boost_round):
 
-        cv_rmse_lgb = lgb.cv(
+        cv_classif_lgb = lgb.cv(
             params,
             train_set=data,
             num_boost_round=num_boost_round,
             nfold=nfold,
             stratified=False,
             folds=None,
-            metrics="rmse",
+            metrics="error",
             seed=43,
         )
-        return cv_rmse_lgb
+        return cv_classif_lgb
 
     def predict_lgb(bst, data):
         return bst.predict(data)
@@ -159,17 +151,12 @@ class CatBoost_Model:
             logging_level="Silent",
         )
 
-        if aliases.order_index[0] in list(data.columns):
-            data.drop(aliases.order_index, axis=1, inplace=True)
-
         bst.fit(
             data, target, plot=False,
         )
         return bst
 
     def train_catboost_cv(self, data, target, params, nb_fold):
-        if aliases.order_index[0] in list(data.columns):
-            data.drop(aliases.order_index, axis=1, inplace=True)
 
         cv_data = cv(Pool(data, target), params, fold_count=nb_fold, plot=False)
         return cv_data
