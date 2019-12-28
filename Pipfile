@@ -12,6 +12,9 @@ pandas = "*"
 matplotlib = "*"
 seaborn = "*"
 jupyterlab = "*"
+lightgbm = "*"
+tables = "*"
+xgboost = "*"
 
 [requires]
 python_version = "3.7"
