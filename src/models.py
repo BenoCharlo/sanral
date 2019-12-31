@@ -70,9 +70,9 @@ class KNN_Model:
         return scores
 
 
-def f1_evalerror(preds, dtrain):
-    labels = dtrain.get_label()
-    err = 1 - f1_score(labels, np.round(preds))
+def f1_evalerror(preds, train):
+    labels = train.get_label()
+    err = f1_score(labels, np.round(preds))
     return "f1_err", err
 
 
@@ -136,7 +136,8 @@ class LGB_Model:
             nfold=nfold,
             stratified=False,
             folds=None,
-            metrics="error",
+            feval=f1_evalerror,
+            metrics="binary_error",
             seed=43,
         )
         return cv_classif_lgb
