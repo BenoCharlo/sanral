@@ -73,7 +73,7 @@ class KNN_Model:
 def f1_evalerror(preds, train):
     labels = train.get_label()
     err = f1_score(labels, np.round(preds))
-    return "f1_err", err
+    return "f1_err", err, False
 
 
 class XGB_Model:
@@ -137,7 +137,7 @@ class LGB_Model:
             stratified=False,
             folds=None,
             feval=f1_evalerror,
-            metrics="binary_error",
+            # metrics="binary_error",
             seed=43,
         )
         return cv_classif_lgb
